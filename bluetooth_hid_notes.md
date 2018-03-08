@@ -24,21 +24,19 @@ You can send rumble data and subcommand with `x01` command, otherwise only rumbl
 
 See "Rumble data" below.
 
-### OUTPUT 0x03
-
-MCU FW Update packet
-
 ### OUTPUT 0x10
 
 Rumble only. See OUTPUT 0x01 and "Rumble data" below.
 
 ### OUTPUT 0x11
 
-Command to MCU.
+Can send rumble.
+
+The 38bytes long data after byte9 (exluding id byte) is a cmd to MCU. It probably functions as a x21 subcmd.
 
 ### OUTPUT 0x12
 
-Unknown. Does the same thing with 0x28 subcmd.
+Unknown. Does the same thing with 0x28 subcmd. The 38 byte long data is taken at byte9 (excluding id byte).
 
 #### Rumble data
 
