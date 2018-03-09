@@ -24,6 +24,9 @@ You can send rumble data and subcommand with `x01` command, otherwise only rumbl
 
 See "Rumble data" below.
 
+
+49 bytes maximum. byte0 id, byte1 timer, byte2-byt9 rumble, byte10 subcmd, byte11-49 subcmd args
+
 ### OUTPUT 0x10
 
 Rumble only. See OUTPUT 0x01 and "Rumble data" below.
