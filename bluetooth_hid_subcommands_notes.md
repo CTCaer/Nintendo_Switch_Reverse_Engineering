@@ -137,9 +137,9 @@ Takes as argument `x00` or `x01`.
 
 If `x01` it writes `x01` @`x5000` of SPI flash. With `x00`, it resets to `xFF` @`x5000`.
 
-If `x01` is set, the feature Triggered Broadcom Fast Connect scans when in suspened or disconnected state is disabled. Additionally, it sets the low power mode, when disconnected, to HID OFF.
+If `x01` is set, the feature Triggered Broadcom Fast Connect scans when in suspended or disconnected state is disabled. Additionally, it sets the low power mode, when disconnected, to HID OFF.
 
-This is useful when the controllers ship, because the controller cannot wake up from button presses. It does not disable all buttons when it has pairing data, only the easy pressable. A long press from the others can wake up the controller, **if it has pairing data**.
+This is useful when the controllers ship, because the controller cannot wake up from button presses. It does not disable all buttons when it has pairing data, only the easy press-able. A long press from the others can wake up the controller, **if it has pairing data**.
 
 Switch always sends `x08 00` subcmd after every connection, and thus enabling Triggered Broadcom Fast Connect and LPM mode to SLEEP.
 
@@ -180,6 +180,8 @@ Write configuration data to MCU. This data can be IR configuration, NFC configur
 Takes 38 or 37 bytes long argument data.
 
 Replies with ACK `xA0` `x20` and 34 bytes of data.
+
+For more about interacting with the MCU, check [IR_NFC_mcu_notes.md](IR_NFC_mcu_notes.md)
 
 ### Subcommand 0x22: Set NFC/IR MCU state
 

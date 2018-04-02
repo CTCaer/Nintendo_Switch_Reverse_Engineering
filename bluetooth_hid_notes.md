@@ -24,6 +24,8 @@ You can send rumble data and subcommand with `x01` command, otherwise only rumbl
 
 See "Rumble data" below.
 
+49 bytes maximum. byte0 id, byte1 timer, byte2-byt9 rumble, byte10 subcmd, byte11-49 subcmd args
+
 ### OUTPUT 0x03
 
 NFC/IR MCU FW Update packet.
@@ -38,7 +40,7 @@ Request specific data from the NFC/IR MCU. Can also send rumble.
 
 ### OUTPUT 0x12
 
-Unknown. Does the same thing with 0x28 subcmd.
+Unknown. Does the same thing with 0x28 subcmd. The 38 byte long data is taken at byte9 (excluding id byte).
 
 #### Rumble data
 
@@ -56,7 +58,7 @@ The values for HF Band frequency and LF amplitude are encoded.
 | 3, 7     | `x40` - `x72` (0.0f - 1.0f)                | Low Band Amplitude. Safe max: `00 72`.                                   |
 | 2-3, 6-7 | `x80 40` - `x80 71` (0.01f - 0.98f)        | Byte `2`,`6` +0x80 enables intermediate LF amplitude. Real max: `80 FF`. |
  
-For a rumble values table, example and the algorithm for frequency, check rumble_data_table.md.
+For a rumble values table, example and the algorithm for frequency, check [rumble_data_table.md](rumble_data_table.md).
 
 The byte values for frequency raise the frequency in Hz exponentially and not linearly.
 
@@ -108,6 +110,10 @@ Standard full mode - input reports with IMU data instead of subcommand replies. 
 ### INPUT 0x31
 
 NFC/IR MCU mode. Pushes large packets with standard input report + NFC/IR MCU data input report.
+
+The NFC/IR section starts at byte49 which is the MCU report id. If this is `x00` the rest of the input report is empty. Normally that's the case when the mcu is not configured or enabled.
+
+For more about interacting with the MCU, check [IR_NFC_mcu_notes.md](IR_NFC_mcu_notes.md)
 
 ### INPUT 0x32
 
@@ -164,11 +170,11 @@ uint16_t stick_vertical = (data[1] >> 4) | (data[2] << 4);
 
 #### Standard input report - 6-Axis sensor data
 
-See [here](imu_sensor_notes.md) for the 6-Axis sensor data format and conversion.
+See [imu_sensor_notes.md](imu_sensor_notes.md) for the 6-Axis sensor data format and conversion.
 
 Also, these are **uncalibrated** stick/sensor data and must be converted to useful axes and values using the calibration data in the SPI flash.
 
-See [here](spi_flash_dump_notes.md#analog-stick-factory-and-user-calibration) for the calibration data format.
+See [spi_flash_dump_notes.md](spi_flash_dump_notes.md#analog-stick-factory-and-user-calibration) for the calibration data format.
 
 ## Feature reports
 
@@ -328,4 +334,4 @@ Unknown parameters needed
 
 ## Subcommands
 
-See [here](bluetooth_hid_subcommands_notes.md) for information about all subcommands supported.
+See [bluetooth_hid_subcommands_notes.md](bluetooth_hid_subcommands_notes.md) for information about all subcommands supported.
