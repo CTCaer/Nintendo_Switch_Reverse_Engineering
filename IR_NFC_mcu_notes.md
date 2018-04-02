@@ -98,7 +98,10 @@ The general format is the same with `x01` output report. The difference is that 
 |:------:|:-------------------:|:--------------------:|
 |  10    | `x01`, `x02`, `x03` | MCU cmd              |
 |  11-46 | ...                 | MCU subcmd arguments |
-|  48    | `xC8`               | [CRC-8-CCITT](https://www.3dbrew.org/wiki/CRC-8-CCITT) that covers byte12-47. The MCU cmd is excluded |
+|  47    | `xC8`               | [CRC-8-CCITT](https://www.3dbrew.org/wiki/CRC-8-CCITT) that covers byte11-46 |
+|  48    |                     | Unknown              |
+
+Notice that the CRC excludes the MCU cmd, but now the range and the position is changed. The last byte is used in some modes.
 
 The replies from this have the data we requested and a CRC at the end, which again we don't care.
 
