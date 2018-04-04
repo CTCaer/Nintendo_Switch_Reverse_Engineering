@@ -31,12 +31,16 @@ Here's some known MCU cmd/subcmd pairs:
 
 ####Set MCU Mode: `x21 00 XX`
 
-| Byte 13 | Mode |
-|:-------:|:----:|
-|   `4`   | NFC  |
-|   `5`   | IR   |
+| Byte 13 | Mode    |
+|:-------:|:-------:|
+|   `1`   | Unknown |
+|   `2`   | Unknown |
+|   `3`   | Unknown |
+|   `4`   | NFC     |
+|   `5`   | IR      |
+|   `6`   | Unknown |
 
-There are probably other modes. (E.g. MCU DFU mode for full flash or only Customer code / IAP flash).
+On of the unknown modes is probably MCU DFU mode for full flash or only Customer code / IAP flash).
 
 This normally replies with `x01`: mcu input report id:
 
@@ -57,17 +61,20 @@ Byte14 is normally 0 for modes that we expect a non-fragmented answer and means 
 
 Byte15-18 should normally be `x00 03 00 09` which means MCU version `3.09`. Actually this is the Customer code or IAP version.
 
-| Byte 13 | Mode                              |
-|:-------:|:---------------------------------:|
-|   `2`   | No mode/Disable/Standby?          |
-|   `3`   | Moment                            |
-|   `4`   | Dpd                               |
-|   `5`   | Unknown                           |
-|   `6`   | Clustering                        |
-|   `7`   | Image transfer                    |
-|   `8`   | Hand analysis: Silhouette         |
-|   `9`   | Hand analysis: Image              |
-|   `10`  | Hand analysis: Silhouette & Image |
+| Byte 13 | Mode                                      |
+|:-------:|:-----------------------------------------:|
+|   `0`   | IR Sensor Reset                           |
+|   `1`   | IR Sensor Sleep (Can't be set from here?) |
+|   `2`   | Unknown                                   |
+|   `3`   | Moment                                    |
+|   `4`   | Dpd                                       |
+|   `5`   | Unknown                                   |
+|   `6`   | Clustering                                |
+|   `7`   | Image transfer (has args)                 |
+|   `8`   | Hand analysis: Silhouette                 |
+|   `9`   | Hand analysis: Image                      |
+|   `10`  | Hand analysis: Silhouette & Image         |
+|   `11`  | Unknown                                   |
 
 It might reply with a `x0b` mcu input report (which is empty) or with `x01` mcu mode state input report. Depends on the mode we chose and if we sent a request for mcu mode state.
 
@@ -149,14 +156,25 @@ The NFC IC cmd data depends on the NFC Command we chose. Possible NFC commands a
 
 | Byte 11| Remarks                                                          |
 |:------:|:----------------------------------------------------------------:|
+|  `x00` | Unknown                                                          |
 |  `x01` | Start Polling (has 5 bytes args)                                 |
 |  `x02` | Stop Polling                                                     |
+|  `x03` | Unknown                                                          |
 |  `x04` | Enable NFC RF?                                                   |
+|  `x05` | Same as `x04`?                                                   |
 |  `x06` | Ntag Read (has args. UID/Blocks to read/etc. Max 19 bytes arg?). |
+|  `x07` | Unknown                                                          |
 |  `x08` | Ntag Write (has args. UID/Blocks to write/blockdata/etc)         |
 |  `x09` | Send raw data (max 200 bytes args?)                              |
-|  `x11` | Register/Clear Mifare Key (has args. Keys or 3 bytes for clear)  |
+|  `x0A` | Unknown                                                          |
+|  `x0B` | Same as `x07`?                                                   |
+|  `x0C` | Unknown                                                          |
+|  `x0D` | Same as `x07`?                                                   |
+|  `x0E` | Same as `x07`?                                                   |
 |  `x0F` | Mifare Read/Write (depends on args given)                        |
+|  `x10` | Unknown                                                          |
+|  `x11` | Register/Clear Mifare Key (has args. Keys or 3 bytes for clear)  |
+|  `x12` | Unknown                                                          |
 
 The reply is a `x31` input report that has an MCU input report that corresponds to the chosen NFC Command sent.
 
