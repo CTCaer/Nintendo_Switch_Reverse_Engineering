@@ -29,7 +29,7 @@ This subcmd normally replies with the values described below. But based on timmi
 
 Here's some known MCU cmd/subcmd pairs:
 
-####Set MCU Mode: `x21 00 XX`
+#### Set MCU Mode: `x21 00 XX`
 
 | Byte 13 | Mode    |
 |:-------:|:-------:|
@@ -47,19 +47,19 @@ This normally replies with `x01`: mcu input report id:
 | Byte # | Remarks                                                                         |
 |:------:|:-------------------------------------------------------------------------------:|
 | 16-17  | Unknown. Error code?                                                            |
-| 18-19  | Unknown. MCU major version?                                                     |
-| 20-21  | Unknown. MCU minor version?                                                     |
+| 18-19  | MCU major version                                                               |
+| 20-21  | MCU minor version                                                               |
 |  22    | MCU State. 1: Standby, 2: Background, 3: ?, 4: NFC, 5: IR, 6: Initializing/Busy |
 
 It includes a CRC-8-CCIT at the end but normally we don't care.
 
-####Set IR Sensor Mode: `x23 01 XX XX XXXX XXXX`
+#### Set IR Sensor Mode: `x23 01 XX XX XXXX XXXX`
 
 This packet has the IR mode at XX (byte13), byte14: end packet id no#, byte15-16/byte17-18: MCU Major/Minor version.
 
 Byte14 is normally 0 for modes that we expect a non-fragmented answer and means 1 packet. For Image transfer mode we expect the image to be sent in fragments.
 
-Byte15-18 should normally be `x00 03 00 09` which means MCU version `3.09`. Actually this is the Customer code or IAP version.
+Byte15-18 are actually the Customer Code version. They should normally be `x00 04 00 12` which means MCU version `4.12`, but it does not really matter. The best way is to use the actual MCU version you got from the controller on the previous replies. 3 known versions are out in the wild. 3.09, 4.12 and 5.18 and depend on whether an update was done to the controller.
 
 | Byte 13 | Mode                                      |
 |:-------:|:-----------------------------------------:|
@@ -78,7 +78,7 @@ Byte15-18 should normally be `x00 03 00 09` which means MCU version `3.09`. Actu
 
 It might reply with a `x0b` mcu input report (which is empty) or with `x01` mcu mode state input report. Depends on the mode we chose and if we sent a request for mcu mode state.
 
-####Write IR Sensor Registers: `x23 04 XX XXXX XX ...`
+#### Write IR Sensor Registers: `x23 04 XX XXXX XX ...`
 
 | Byte # | Remarks                                         |
 |:------:|:-----------------------------------------------:|
@@ -128,8 +128,8 @@ The input report `x31` we get as a reply follows this format:
 |:------:|:-------------------------------------------------------------------------------:|
 |  49    | `x01` (MCU input report id for data that has mcu mode info)                     |
 | 50-51  | Unknown. Error code?                                                            |
-| 52-53  | Unknown. MCU major version?                                                     |
-| 54-55  | Unknown. MCU minor version?                                                     |
+| 52-53  | MCU major version                                                               |
+| 54-55  | MCU minor version                                                               |
 |  56    | MCU State. 1: Standby, 2: Background, 3: ?, 4: NFC, 5: IR, 6: Initializing/Busy |
 
 This request is used to identify the MCU state. For example, if it's `x06`, we should not send any further command, either via `x01 .. x21` or `x11 .. XX`, and we must wait until we receive any of the `x01`,`x04`, `x05` states.
@@ -213,8 +213,10 @@ By sending this, the MCU replies with `x13` MCU input report id that follows the
 |   49   | `x13`. (MCU input report id for data that has IR mode info)     |
 |   50   | Unknown. Seems to be always `x00`.                              |
 |   51   | Current IR Mode                                                 |
-|  52-53 | Required MCU Major Version. UInt16. User set. Normally `x0003`. |
-|  54-55 | Required MCU Minor Version. UInt16. User set. Normally `x0009`. |
+|  52-53 | Required MCU Major Version. UInt16. User set. Normally `x0004`. |
+|  54-55 | Required MCU Minor Version. UInt16. User set. Normally `x0012`. |
+
+Bytes 52-55 is the version that was sent earlier from the `Set IR Sensor Mode` cmd.
 
 #### Read IR Sensor Registers state: `x03 03 01 XX XX`
 
