@@ -67,7 +67,7 @@ Byte15-18 are actually the Customer Code version. They should normally be `x00 0
 |   `1`   | IR Sensor Sleep (Can't be set from here?) |
 |   `2`   | Unknown                                   |
 |   `3`   | Moment                                    |
-|   `4`   | Dpd                                       |
+|   `4`   | Dpd (Wii-style pointing)                  |
 |   `5`   | Unknown                                   |
 |   `6`   | Clustering                                |
 |   `7`   | Image transfer (has args)                 |
