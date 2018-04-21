@@ -258,10 +258,10 @@ Each section is for different stick.
 | `0`, `1`   | `019 4CD` | Seems that this is unused |
 | `2`        | `AE`      | Dead-zone                 |
 | `3`        | `E14`     | Range ratio               |
-| `4`, `5`   | `2EE 2EE` | X/Y: Unknown              |
-| `6`, `7`   | `2EE 2EE` | X/Y: Unknown              |
-| `8`, `9`   | `AB4 AB4` | X/Y: Unknown              |
-| `10`, `11` | `496 496` | X/Y: Unknown              |
+| `4`, `5`   | `2EE 2EE` | X/Y: +Axis min            |
+| `6`, `7`   | `2EE 2EE` | X/Y: -Axis min            |
+| `8`, `9`   | `AB4 AB4` | X/Y: Center max           |
+| `10`, `11` | `496 496` | X/Y: Center min           |
 
 ##### Dead-zone:
 
@@ -270,3 +270,9 @@ It is used to all directions, so it isn't divided by 2. It behaves like a radial
 ##### Range ratio:
 
 Making this very small, produces d-pad like movement on the cross but still retains circular directionality. So it probably produces a float coefficient.
+
+##### Validating minimum/maximum ranges:
+
+The calibration data is validated through the stick device parameters. The [+-]Axis X/Y are validated with `+-Axis min < cal value < 4096` and the Center with `Center min < cal value < Center max`. If any of values is out of range they are not used. 
+
+If they are OK, 4 of the values are then multiplied with the fraction `Range ratio/4096` which for Joy-Con is `0.88` and for Pro Controller is `0.95`. These 4 are probably the min/max for the X/Y Axis.
