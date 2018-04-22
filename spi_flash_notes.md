@@ -89,27 +89,27 @@ The first byte is probably set to x1 on new Joy-Con. Switch makes sure to set it
 
 ## x6000 Factory Configuration and Calibration
 
-|  Section Range  | Subsection Range | Remarks                                                                 |
-|:---------------:|:----------------:| ----------------------------------------------------------------------- |
+|  Section Range  | Subsection Range | Remarks                                                        |
+|:---------------:|:----------------:| -------------------------------------------------------------- |
 | `x6000`-`x600F` | -------------    | Serial number in non-extended ASCII. If first byte is >= `x80`, no S/N. If a byte is `00` `NUL`, skip. Max 15 chars, if 16 chars last one is skipped.|
 | `x6012`         | -------------    | Device type. JC (L): `x01`, JC (R): `x02`, Pro: `x03`. Only the 3 LSB are accounted for. Used internally and for `x02` subcmd. |
-| `x6013`         | -------------    | Unknown, seems to always be `xA0`                                       |
+| `x6013`         | -------------    | Unknown, seems to always be `xA0`                              |
 | `x601B`         | -------------    | Color info exists if `x01`. If 0, default colors used are ARGB `#55555555`, `#FFFFFFFF`. Used for `x02` subcmd. |
-| `x6020`-`x6037` | -------------    | Factory configuration & calibration 1                                   |
-|                 | `x6020 - x6037`  | 6-Axis motion sensor Factory calibration                                |
-| `x603D`-`x6055` | -------------    | Factory configuration & calibration 2                                   |
-|                 | `x603D - x6045`  | Left analog stick calibration                                           |
-|                 | `x6046 - x604E`  | Right analog stick calibration                                          |
-|                 | `x6050 - x6052`  | Body #RGB color, 24-bit                                                 |
-|                 | `x6053 - x6055`  | Buttons #RGB color, 24-bit                                              |
-|                 | `x6056 - x6058`  | Left Grip #RGB color, 24-bit (Added in 5.0.0 for Pro)                   |
-|                 | `x6059 - x605B`  | Right Grip #RGB color, 24-bit (Added in 5.0.0 for Pro)                  |
-| `x6080`-`x6097` | -------------    | Factory Sensor and Stick device parameters                              |
-|                 | `x6080`-`x6085`  | 6-Axis Horizontal Offsets. (JC sideways)                                |
-|                 | `x6086`-`x6097`  | Stick device parameters 1                                               |
-| `x6098`-`x60A9` | -------------    | Factory Stick device parameters 2                                       |
-|                 | `x6098`-`x60A9`  | Stick device parameters 2. Normally the same with 1, even in Pro Contr. |
-| `x6E00`-`x6EFF` | -------------    | Unknown data values.. Exists only in Joy-Con                            |
+| `x6020`-`x6037` | -------------    | Factory configuration & calibration 1                          |
+|                 | `x6020 - x6037`  | 6-Axis motion sensor Factory calibration                       |
+| `x603D`-`x6055` | -------------    | Factory configuration & calibration 2                          |
+|                 | `x603D - x6045`  | Left analog stick calibration                                  |
+|                 | `x6046 - x604E`  | Right analog stick calibration                                 |
+|                 | `x6050 - x6052`  | Body #RGB color, 24-bit                                        |
+|                 | `x6053 - x6055`  | Buttons #RGB color, 24-bit                                     |
+|                 | `x6056 - x6058`  | Left Grip #RGB color, 24-bit (Added in 5.0.0 for Pro)          |
+|                 | `x6059 - x605B`  | Right Grip #RGB color, 24-bit (Added in 5.0.0 for Pro)         |
+| `x6080`-`x6097` | -------------    | Factory Sensor and Stick device parameters                     |
+|                 | `x6080`-`x6085`  | 6-Axis Horizontal Offsets. (JC sideways)                       |
+|                 | `x6086`-`x6097`  | Stick device parameters 1                                      |
+| `x6098`-`x60A9` | -------------    | Factory Stick device parameters 2                              |
+|                 | `x6098`-`x60A9`  | Stick device parameters 2. Applicable only to Pro right stick. |
+| `x6E00`-`x6EFF` | -------------    | Unknown data values.. Exists only in Joy-Con                   |
 
 Above data ends at `x6F00`.
 
