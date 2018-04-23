@@ -159,7 +159,7 @@ In the following tables, the default values are from Image transfer mode. When i
 |  x0D  |                     |                      |
 |  x0E  |                     |                      |
 |  x0F  |                     |                      |
-|  x10  | `x03` / x00-xDF bitwise. | Brightness? On/Off to sth? Probably only 2 bits. |
+|  x10  | `x03` / x00-xDF bitwise. | bit0: Enables/Disables sth, bit1: Enables manual exp/d.gain. Otherwise it defaults to 480ms/x2. Probably only 2 bits are usable? |
 |  x11  | `xC8` / x00-xFF     |                      |
 |  x12  | `x0f` / x00-xFF     |                      |
 |  x13  | `x18` / x00-xFF     |                      |
@@ -210,7 +210,7 @@ In the following tables, the default values are from Image transfer mode. When i
 |  x40  |                     |                      |
 |  x41  |                     |                      |
 |  x42  |                     |                      |
-|  x43  | `xC8` / x00-xFF     | ????????             |
+|  x43  | `xC8` / x00-xFF     | White/Exfr pixels threshold |
 |  x44  |                     |                      |
 |  x45  |                     |                      |
 |  x46  |                     |                      |
@@ -223,7 +223,7 @@ In the following tables, the default values are from Image transfer mode. When i
 |  x4D  |                     |                      |
 |  x4E  |                     |                      |
 |  x4F  |                     |                      |
-|  x50  |                     |                      |
+|  x50  | `x01` / x00, x01, x10, x11 | Brightness?    |
 |  x51  |                     |                      |
 |  x52  |                     |                      |
 |  x53  |                     |                      |
@@ -246,9 +246,9 @@ In the following tables, the default values are from Image transfer mode. When i
 |  x64  |                     |                      |
 |  x65  |                     |                      |
 |  x66  |                     |                      |
-|  x67  |                     |                      |
-|  x68  |                     |                      |
-|  x69  |                     |                      |
+|  x67  | `x00` / 0-1         | Enable De-Noise      |
+|  x68  | `x23` / x00-xFF     | De-Noise Edge Smoothing threshold |
+|  x69  | `x44` / x00-xFF     | De-Noise Color Interpolation threshold |
 |  x6A  |                     |                      |
 |  x6B  |                     |                      |
 |  x6C  |                     |                      |
