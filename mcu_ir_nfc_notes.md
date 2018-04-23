@@ -200,7 +200,7 @@ It follows the following format:
 |   47   | [CRC-8-CCITT](https://www.3dbrew.org/wiki/CRC-8-CCITT) for byte11-46 (36 bytes)|
 |   48   | Normally `xFF` (read above at `x11` ouput report for more info)                |
 
-This is used to mostly ack a received packet or inform that we missed a packet. So it's a reply and we expect the MCU to push the next fragment/packet or the missed fragments.
+This is mostly used as an ACK for a received fragment. Otherwise to request a missed fragment. So after sending this, we expect the MCU to push the next fragment/packet or the missed fragments.
 
 #### Request IR Mode state: `x03 02`
 
