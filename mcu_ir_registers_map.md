@@ -33,7 +33,7 @@ Unknown registers will be truncated to make the tables smaller.
 |  x13  | `x11` / High-Low nibbles: 0-3 |                                                                  |
 |  x14  | `x00` / x00-xFF               | Move image to the left)                                          |
 |  x15  | `x00` / x00-xFF               | Truncate image upwards. Clipped image goes to the left side.     |
-|  x16  | `x3F` / x00-xFF               | Strange rotation. Is it no of columns enabled?                   |
+|  x16  | `x3F` / x00-xFF               | Strange rotation. Is it no. of columns enabled?                  |
 |  x17  | `xEF` / x00-xFF               | No. of rows enabled - 1                                          |
 |  x18  | `x01` / High-Low nibbles: 0-3 | 1: Normal image. Else multiple frames?                           |
 |  x19  |                               |                                                                  |
