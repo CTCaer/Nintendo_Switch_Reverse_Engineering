@@ -157,7 +157,7 @@ The format of the subcmd args is the following:
 |   11   | NFC Command                                                                    |
 |   12   | Packet no. Used for identifying the fragment of the NFC command packet.        |
 |   13   | Unknown                                                                        |
-|   14   | `x00`: more packets will follow, `x08`: This is the last packet.               |
+|   14   | `x00`: more cmd fragments will follow, `x08`: This is the last cmd fragment.   |
 |   15   | Length of following data                                                       |
 |  16-46 | NFC IC cmd data. Size of(byte15). Max 31 bytes.                                |
 |   47   | [CRC-8-CCITT](https://www.3dbrew.org/wiki/CRC-8-CCITT) for byte11-46 (36 bytes)|
@@ -167,12 +167,12 @@ The NFC IC cmd data depends on the NFC Command we chose. Possible NFC commands a
 
 | Byte 11| Remarks                                                          |
 |:------:|:----------------------------------------------------------------:|
-|  `x00` | Unknown                                                          |
+|  `x00` | Cancel all?                                                      |
 |  `x01` | Start Polling (has 5 bytes args)                                 |
 |  `x02` | Stop Polling                                                     |
 |  `x03` | Unknown                                                          |
-|  `x04` | Enable NFC RF?                                                   |
-|  `x05` | Same as `x04`?                                                   |
+|  `x04` | Start Tag Discovery                                              |
+|  `x05` | Same as `x04`?                                                 |
 |  `x06` | Ntag Read (has args. UID/Blocks to read/etc. Max 19 bytes arg?). |
 |  `x07` | Unknown                                                          |
 |  `x08` | Ntag Write (has args. UID/Blocks to write/blockdata/etc)         |
@@ -355,7 +355,7 @@ Depending on the request/answer, the format after the main header changes.
 |   x40   | Argument error                 |
 |   x41   | Timeout error                  |
 |   x42   | Invalid UID error              |
-|   x43   | Unknown error?                 |
+|   x43   | Unknown error                  |
 |   x44   | T2T password Invalid Tag error |
 |   x45   | Verify error                   |
 |   x46   | Activation error               |
@@ -374,13 +374,13 @@ Anything else is Unknown error.
 |:-------:|:------------------------------:|
 |   x00   | Waiting for command            |
 |   x01   | Tag polling                    |
-|   x02   | Reading                        |
-|   x03   | Writing                        |
-|   x04   | Read finished                  |
-|   x05   | Write finished                 |
+|   x02   | Tag Reading                    |
+|   x03   | Tag Writing                    |
+|   x04   | Tag Read finished              |
+|   x05   | Tag Write finished             |
 |   x06   | Pass-through sending           |
 |   x07   | Error (this activates byte50?) |
-|   x08   | Deactivated                    |
+|   x08   | NFC Deactivated                |
 |   x09   | Tag detected                   |
 |   x0A   | Factory mode                   |
 |   x0B   | Initializing                   |
