@@ -13,7 +13,9 @@ Update 5.0.0: `5.18`
 
 Update 4.0.0: `4.12` 
 
-Initial     : `3.09`
+Initial Joy : `3.09`
+
+Initial Pro : `3.05`
 
 # Output reports
 
