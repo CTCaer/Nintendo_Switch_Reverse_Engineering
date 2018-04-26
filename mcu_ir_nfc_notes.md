@@ -320,14 +320,15 @@ This is received when we send a command and request NFC polling status or tag in
 
 The `x2a` has 2 headers. The main header and the NFC data header.
 
-Main + NFC data Headers:
+#### Main + NFC data Headers:
 
 | Byte # | Remarks                                                            |
 |:------:| ------------------------------------------------------------------ |
 |   49   | `x2a`. (MCU input report id for NFC tag info.                      |
-|   50   | Error type? This shows up when byte56 is `x07`.                    |
-|   51   | MCU mode - NFC                                                     |
-|  52-53 | Unknown                                                            |
+|   50   | NFC Result. This shows up when byte56 is `x07`.                    |
+|   51   | Unknown                                                            |
+|   52   | Unknown                                                            |
+|   53   | Unknown                                                            |
 |   54   | Size of the following NFC data header (excludes byte55 or byte63?) |
 |   --   | -- Start of NFC data header --                                     |
 |   55   | Always `x31`. NFC data id report?                                  |
@@ -342,7 +343,32 @@ Main + NFC data Headers:
 
 Depending on the request/answer, the format after the main header changes.
 
-NFC MCU States (byte 56):
+#### NFC Result (byte 50):
+
+| Result #| Remarks                        |
+|:-------:|:------------------------------:|
+|   x00   | OK                             |
+|   x3C   | Function error                 |
+|   x3D   | Reset required                 |
+|   x3E   | Read error                     |
+|   x3F   | Write error                    |
+|   x40   | Argument error                 |
+|   x41   | Timeout error                  |
+|   x42   | Invalid UID error              |
+|   x43   | Unknown error?                 |
+|   x44   | T2T password Invalid Tag error |
+|   x45   | Verify error                   |
+|   x46   | Activation error               |
+|   x47   | Invalid tag error              |
+|   x48   | Invalid format error           |
+|   x49   | Authentication error           |
+|   x4A   | Sequence error                 |
+|   x4B   | Cmd timeout error              |
+|   x4C   | Mifare error                   |
+
+Anything else is Unknown error.
+
+#### NFC MCU States (byte 56):
 
 | State # | Remarks                        |
 |:-------:|:------------------------------:|
@@ -365,26 +391,8 @@ NFC MCU States (byte 56):
 |   x10   | Mifare finished                |
 |   x11   | Mifare key writing             |
 |   x12   | Mifare key writing finished    |
-|   x13   | Function error                 |
-|   x14   | Reset required                 |
-|   x15   | Read error                     |
-|   x16   | Write error                    |
-|   x17   | Argument error                 |
-|   x18   | Timeout error                  |
-|   x19   | Invalid UID error              |
-|   x1A   | Unknown error?                 |
-|   x1B   | T2T password Invalid Tag error |
-|   x1C   | Verify error                   |
-|   x1D   | Activation error               |
-|   x1E   | Invalid tag error              |
-|   x1F   | Invalid format error           |
-|   x20   | Authentication error           |
-|   x21   | Sequence error                 |
-|   x22   | Cmd timeout error              |
-|   x23   | Mifare error                   |
 
-
-
+Anything else is Unknown state.
 
 # IR Camera
 details. pixels, focal, etc, omnivision?
