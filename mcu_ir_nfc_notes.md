@@ -7,7 +7,7 @@ The Nintendo customer code or IAP (in-application programming) is based on STM32
 The communication/configuration to the MCU is done via HID by utilizing the `x11` output report paired with `x00-x03` subcmds and the `x01` output report paired with the `x2#` subcmds.
 
 
-####MCU Firmware Versions:
+#### MCU Firmware Versions:
 
 Update 5.0.0: `5.18`
 
@@ -281,9 +281,9 @@ The known MCU State values are:
 |    5    | IR mode                      |
 |    6    | Initializing/Busy/FW Update? |
 
-### MCU Report x0b: Busy?
+### MCU Report x0b: Busy/Initializing
 
-### MCU Report x13: IR Mode state
+### MCU Report x13: IR Mode State
 
 This report is requested by using the `x03 02` MCU subcmd. It has the following format:
 
@@ -297,7 +297,7 @@ This report is requested by using the `x03 02` MCU subcmd. It has the following 
 
 Bytes 52-55 is the version that was sent earlier from the `Set IR Sensor Mode` cmd.
 
-### MCU Report x1b: IR Sensor registers
+### MCU Report x1b: IR Sensor Registers
 
 This report is requested by using the `x03 03` MCU subcmd. It includes the read values from the IR sensor requested registers. It has the following format:
 
@@ -312,7 +312,7 @@ This report is requested by using the `x03 03` MCU subcmd. It includes the read 
 |   ..   |                                                           |
 |   54 + offset + no_of_registers | Register values end              |
 
-### MCU Report x2b: NFC Tag info
+### MCU Report x2a: NFC State/Tag Info
 
 TODO: Is it used for NFC tag data also??
 
@@ -326,18 +326,18 @@ The `x2a` has 2 headers. The main header and the NFC data header.
 |:------:| ------------------------------------------------------------------ |
 |   49   | `x2a`. (MCU input report id for NFC tag info.                      |
 |   50   | NFC Result. This shows up when byte56 is `x07`.                    |
-|   51   | Unknown                                                            |
+|   51   | Input Type. 5: State info, 7: Ntag read data, xA: Pass-through data, x10: Mifare data |
 |   52   | Unknown                                                            |
 |   53   | Unknown                                                            |
 |   54   | Size of the following NFC data header (excludes byte55 or byte63?) |
 |   --   | -- Start of NFC data header --                                     |
 |   55   | Always `x31`. NFC data id report?                                  |
-|   56   | NFC MCU State (detailed values below TODO) or nfc data report id?  |
+|   56   | NFC IC State (detailed values below TODO) or nfc data report id?   |
 |  57-58 | Unknown                                                            |
-|   59   | Unknown. When there's data, it's `x01`                             |
+|   59   | 0: No Tag info data, 1: Has Tag info data                          |
 |   60   | Unknown. When there's data, it's `x01`                             |
-|   61   | Type of NFC Tag. `x02`: Ntag, `x04`: Mifare.                       |
-|   62   | Unknown. Always `x00`?                                             |
+|   61   | NFC Tag IC. 2: Ntag, 4: Mifare.                                    |
+|   62   | NFC Type. 0: Type A, 1: Type B, 2: Type F, 6: ISO/IEC 15693 type   |
 |   63   | Size of the following Tag UID                                      |
 |   64   | -- NFC tag info -- (UID)                                           |
 
@@ -393,6 +393,8 @@ Anything else is Unknown error.
 |   x12   | Mifare key writing finished    |
 
 Anything else is Unknown state.
+
+### MCU Report x3a: Tag Read Data
 
 # IR Camera
 details. pixels, focal, etc, omnivision?
