@@ -159,7 +159,7 @@ The format of the subcmd args is the following:
 |   13   | Unknown                                                                        |
 |   14   | `x00`: more cmd fragments will follow, `x08`: This is the last cmd fragment.   |
 |   15   | Length of following data                                                       |
-|  16-46 | NFC IC cmd data. Size of(byte15). Max 31 bytes.                                |
+|  16-46 | NFC IC cmd data. Size of byte15. Max 31 bytes.                                 |
 |   47   | [CRC-8-CCITT](https://www.3dbrew.org/wiki/CRC-8-CCITT) for byte11-46 (36 bytes)|
 |   48   | Unknown                                                                        |
 
@@ -172,8 +172,8 @@ The NFC IC cmd data depends on the NFC Command we chose. Possible NFC commands a
 |  `x02` | Stop Polling                                                     |
 |  `x03` | Unknown                                                          |
 |  `x04` | Start Tag Discovery                                              |
-|  `x05` | Same as `x04`?                                                 |
-|  `x06` | Ntag Read (has args. UID/Blocks to read/etc. Max 19 bytes arg?). |
+|  `x05` | Same as `x04`?                                                   |
+|  `x06` | Ntag Read (has args. UID/Blocks to read/etc. Max 19 bytes arg).  |
 |  `x07` | Unknown                                                          |
 |  `x08` | Ntag Write (has args. UID/Blocks to write/blockdata/etc)         |
 |  `x09` | Send raw data (max 200 bytes args?)                              |
@@ -329,17 +329,17 @@ The `x2a` has 2 headers. The main header and the NFC data header.
 |   51   | Input Type. 5: State info, 7: Ntag read data, xA: Pass-through data, x10: Mifare data |
 |   52   | Unknown                                                            |
 |   53   | Unknown                                                            |
-|   54   | Size of the following NFC data header (excludes byte55 or byte63?) |
+|   54   | Unknown. Known values 1, 8, 9                                      |
 |   --   | -- Start of NFC data header --                                     |
-|   55   | Always `x31`. NFC data id report?                                  |
-|   56   | NFC IC State (detailed values below TODO) or nfc data report id?   |
-|  57-58 | Unknown                                                            |
-|   59   | 0: No Tag info data, 1: Has Tag info data                          |
-|   60   | Unknown. When there's data, it's `x01`                             |
-|   61   | NFC Tag IC. 2: Ntag, 4: Mifare.                                    |
-|   62   | NFC Type. 0: Type A, 1: Type B, 2: Type F, 6: ISO/IEC 15693 type   |
-|   63   | Size of the following Tag UID                                      |
-|   64   | -- NFC tag info -- (UID)                                           |
+|   55   | Normally `x31`. Other known x27, xf0                               |
+|   56   | NFC IC State                                                       |
+|  57-59 | Unknown                                                            |
+|   60   | 0: No Tag info data, 1: Has Tag info data                          |
+|   61   | Unknown. When there's data, it's `x01`                             |
+|   62   | NFC Tag IC. 2: Ntag, 4: Mifare.                                    |
+|   63   | NFC Type. 0: Type A, 1: Type B, 2: Type F, 6: ISO/IEC 15693 type   |
+|   64   | Size of the following Tag UID                                      |
+|   65   | -- NFC tag info -- (UID)                                           |
 
 Depending on the request/answer, the format after the main header changes.
 
@@ -368,7 +368,7 @@ Depending on the request/answer, the format after the main header changes.
 
 Anything else is Unknown error.
 
-#### NFC MCU States (byte 56):
+#### NFC IC States (byte 56):
 
 | State # | Remarks                        |
 |:-------:|:------------------------------:|
