@@ -25,6 +25,7 @@ Initial Pro : `3.05`
 
 Before starting to interact with the MCU, `x03` subcmd paired with `x31` must be sent first. This will change the input report format to MCU/IR mode.
 
+
 ### Subcmd x21: Write configuration to IR/NFC MCU
 
 The `x21` subcmd is used to configure the MCU. The argument format is: 
@@ -39,6 +40,7 @@ The `x21` subcmd is used to configure the MCU. The argument format is:
 This subcmd normally replies with the values described below. But based on timming and if we sent a `x11` output report before it may reply with `x23`
 
 Here's some known MCU cmd/subcmd pairs:
+
 
 #### Set MCU Mode: `x21 00 XX`
 
@@ -63,6 +65,7 @@ This normally replies with `x01`: mcu input report id:
 |  22    | MCU State. 1: Standby, 2: Background, 3: ?, 4: NFC, 5: IR, 6: Initializing/Busy |
 
 It includes a CRC-8-CCIT at the end but normally we don't care.
+
 
 #### Set IR Sensor Mode: `x23 01 XX XX XXXX XXXX`
 
@@ -89,6 +92,7 @@ Byte15-18 are actually the Customer Code version. They should normally be `x00 0
 
 It might reply with a `x0b` mcu input report (which is empty) or with `x01` mcu mode state input report. Depends on the mode we chose and if we sent a request for mcu mode state.
 
+
 #### Write IR Sensor Registers: `x23 04 XX XXXX XX ...`
 
 | Byte # | Remarks                                         |
@@ -103,6 +107,7 @@ For the sensor to apply the configuration, the value `1` should be sent to addre
 This replies with `x13` mcu input report (IR mode info), an unknown UInt8, the IR mode currently set and the MCU Version.
 
 //TODO: For more info about the known registers check [Appendix A](IR_NFC_mcu_notes.md#Appendix A).
+
 
 ### Subcmd x22: Suspend/Resume MCU
 
@@ -127,7 +132,9 @@ The replies from this have the data we requested and a CRC at the end, which aga
 
 Additionally, based one the order and timing we send this output report, it can effect the reply of a `x21` input report that has an ack/reply for a `x21` subcmd.
 
+
 ### Subcmd x00: 
+
 
 ### Subcmd x01: Request MCU status
 
@@ -144,6 +151,7 @@ The input report `x31` we get as a reply follows this format:
 |  56    | MCU State. 1: Standby, 2: Background, 3: ?, 4: NFC, 5: IR, 6: Initializing/Busy |
 
 This request is used to identify the MCU state. For example, if it's `x06`, we should not send any further command, either via `x01 .. x21` or `x11 .. XX`, and we must wait until we receive any of the `x01`,`x04`, `x05` states.
+
 
 ### Subcmd x02: Request NFC data report
 
@@ -189,6 +197,7 @@ The NFC IC cmd data depends on the NFC Command we chose. Possible NFC commands a
 
 The reply is a `x31` input report that has an MCU input report that corresponds to the chosen NFC Command sent.
 
+
 ### Subcmd x03: Request IR data report
 
 When we interact with the IR MCU portion, after setting the MCU mode to IR, we use this subcmd.
@@ -196,6 +205,7 @@ When we interact with the IR MCU portion, after setting the MCU mode to IR, we u
 Like all subcmds in the `x11` output report, it adheres to the CRC8 byte rules.
 
 Here are the known IR Commands:
+
 
 #### Request IR sensor data: `x03 00 XX XX XX`
 
@@ -213,11 +223,13 @@ It follows the following format:
 
 This is mostly used as an ACK for a received fragment. Otherwise to request a missed fragment. So after sending this, we expect the MCU to push the next fragment/packet or the missed fragments.
 
+
 #### Request IR Mode state: `x03 02`
 
 Normally the last byte (byte48) should be `xFF` (read above at `x11` ouput report for more info).
 
 By sending this, the MCU replies with `x13` MCU input report id.
+
 
 #### Read IR Sensor Registers state: `x03 03 01 XX XX`
 
@@ -248,13 +260,16 @@ The replies from MCU sent via the `x31` input report. Sometimes for the simple m
 
 The MCU data starts at byte49. This specific byte is the `MCU Report ID`
 
+
 ### MCU Report x00
 
 Empty report / MCU is suspended. Sometimes we can receive this report when the MCU is configured and in use. In this case, it probably means MCU is busy. 
 
+
 ### MCU Report xFF
 
 Empty report / Awaiting mcu command.
+
 
 ### MCU Report x01: MCU State Report
 
@@ -281,7 +296,12 @@ The known MCU State values are:
 |    5    | IR mode                      |
 |    6    | Initializing/Busy/FW Update? |
 
+
+### MCU Report x03: IR Data Report
+
+
 ### MCU Report x0b: Busy/Initializing
+
 
 ### MCU Report x13: IR Mode State
 
@@ -296,6 +316,7 @@ This report is requested by using the `x03 02` MCU subcmd. It has the following 
 |  54-55 | Required MCU Minor Version. UInt16. User set. Normally `x0012`. |
 
 Bytes 52-55 is the version that was sent earlier from the `Set IR Sensor Mode` cmd.
+
 
 ### MCU Report x1b: IR Sensor Registers
 
@@ -312,28 +333,31 @@ This report is requested by using the `x03 03` MCU subcmd. It includes the read 
 |   ..   |                                                           |
 |   54 + offset + no_of_registers | Register values end              |
 
+
 ### MCU Report x2a: NFC State/Tag Info
 
 TODO: Is it used for NFC tag data also??
 
 This is received when we send a command and request NFC polling status or tag info from the NFC IC.
 
-The `x2a` has 2 headers. The main header and the NFC data header.
+The `x2a` has 2 headers. The NFC Packet header and the NFC Reply header.
 
-#### Main + NFC data Headers:
+#### Packet + Reply Headers:
 
 | Byte # | Remarks                                                            |
 |:------:| ------------------------------------------------------------------ |
+|   --   | -- NFC Packet Header --                                            |
 |   49   | `x2a`. (MCU input report id for NFC tag info.                      |
 |   50   | NFC Result. This shows up when byte56 is `x07`.                    |
 |   51   | Input Type. 5: State info, 7: Ntag read data, xA: Pass-through data, x10: Mifare data |
-|   52   | Unknown                                                            |
+|   52   | Serialized ID of fragment                                          |
 |   53   | Unknown                                                            |
-|   54   | Unknown. Known values 1, 8, 9                                      |
-|   --   | -- Start of NFC data header --                                     |
-|   55   | Normally `x31`. Other known x27, xf0                               |
+|   54   | bi3: Last fragment. bi0-2: Size of payload MSB.                    |
+|   55   | Size of payload LSB. MSB can be 7, but the real Max is 305 bytes.  |
+|   --   | -- Start of Payload --                                             |
+|   --   | -- NFC Reply Header --                                             |
 |   56   | NFC IC State                                                       |
-|  57-59 | Unknown                                                            |
+|  57-59 | Unused?                                                            |
 |   60   | 0: No Tag info data, 1: Has Tag info data                          |
 |   61   | Unknown. When there's data, it's `x01`                             |
 |   62   | NFC Tag IC. 2: Ntag, 4: Mifare.                                    |
@@ -394,7 +418,9 @@ Anything else is Unknown error.
 
 Anything else is Unknown state.
 
+
 ### MCU Report x3a: Tag Read Data
+
 
 # IR Camera
 details. pixels, focal, etc, omnivision?
